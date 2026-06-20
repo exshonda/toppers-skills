@@ -75,6 +75,13 @@ SMP（FMP系）カーネルは、PE間・遅延ディスパッチ枝／タイム
 SMPで分岐カバレッジが単核より低く出るのは多くが正常（並行シナリオ不在）。概念は
 [`references/multiprocessor-testing.md`](references/multiprocessor-testing.md)。
 
+### 時間管理を決定的に検証する（タイマドライバシミュレータ）
+
+実タイマでなくシミュレート時刻を使い「時刻を進める呼出」で進めた分だけ時刻が進むターゲットを
+用意すると、周期/アラーム/タイムアウト等の時間管理系を実機・通常エミュレータ非依存で**決定的に**
+回帰できる（マルチコアでは進める呼出がPE間バリアになりクロスPE時刻同期も試験）。概念は
+[`references/deterministic-time-simulation.md`](references/deterministic-time-simulation.md)。
+
 ---
 
 ## 4. カバレッジと「到達不能な経路」（検証の網羅）
@@ -143,6 +150,7 @@ ARMv8-M Security Extension の dual-OS モニタ型（Secure 側 RTOS＋Non-secu
 | [`references/debugging-playbook.md`](references/debugging-playbook.md) | ハードフォルト/ハング/優先度逆転/スタック溢れ/コンテキストエラー等の症状→原因→確認手順 |
 | [`references/conformance-ttsp3.md`](references/conformance-ttsp3.md) | TTSP3 の概念・PASS/FAIL/SKIP の解釈・移植検証での使い方 |
 | [`references/multiprocessor-testing.md`](references/multiprocessor-testing.md) | FMP系（SMP）派生のテスト・カバレッジ概念（PE間枝・時刻転送・割込みアフィニティ・IRC方式・PE間同期・サブ優先度）＋SMPレースの決定的再現法（最小リバート帰属・自己マイグレーション往復） |
+| [`references/deterministic-time-simulation.md`](references/deterministic-time-simulation.md) | タイマドライバシミュレータで時間管理を決定的に検証（シミュレート時刻を「進める呼出」で進める→周期/アラーム/タイムアウトを実機・通常エミュ非依存で再現／マルチコアは進める呼出がPE間バリア＝クロスPE時刻同期試験／HRT割込み誘発のみアーキ依存＝ソフトでペンディング可能な割込み源を選ぶ／host-simulation-port・multiprocessor-testingとは目的が別） |
 | [`references/host-simulation-port.md`](references/host-simulation-port.md) | ホスト上で擬似実行する移植（POSIX等・タスク＝ホストスレッド）のデバッグ着眼（決定/担体分離のレース窓・per-PE汚染・シグナル乗っ取り・lost-wakeup） |
 | [`references/reaching-unreachable-contexts.md`](references/reaching-unreachable-contexts.md) | タスクから踏めない実行時コンテキスト（アイドル＝実行中タスク無し等）の防御/復帰経路へ、正規フック点を計測用刺激注入口に流用してカーネル無改変で到達する作法（最初の進入で起こす・ハンドラ最小復帰・SMPは自PE固定） |
 | [`references/hand-written-assembly-coverage.md`](references/hand-written-assembly-coverage.md) | gcov が効かない手書きアセンブリ（`.S`）の C0/C1 を実行トレース×デバッグ行情報で測る原理と落とし穴（トレース爆発の drain＋timeout・デバッグ情報版差・別リンクの行空間合算・union前クリーン再ビルド） |
