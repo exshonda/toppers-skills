@@ -146,10 +146,10 @@ ARMv8-M Security Extension の dual-OS モニタ型（Secure 側 RTOS＋Non-secu
 
 | ファイル | 引くタイミング |
 |---|---|
-| [`references/observing-execution.md`](references/observing-execution.md) | トレース/ログで何をどう観測するか、読み解きの着眼点。実機 attach 観測。**カーネルに OS-awareness 機構が無いとき自作する作法**（静的const/動的CBの別・名前は生成cfgから・キュー/状態の読み解き・優先度ビットマップのMSB詰め・割込みコントローラのレジスタ観測・スタック使用量の概算・Python対応gdb） |
-| [`references/debugging-playbook.md`](references/debugging-playbook.md) | ハードフォルト/ハング/優先度逆転/スタック溢れ/コンテキストエラー等の症状→原因→確認手順 |
+| [`references/observing-execution.md`](references/observing-execution.md) | トレース/ログで何をどう観測するか、読み解きの着眼点。実機 attach 観測。**カーネルに OS-awareness 機構が無いとき自作する作法**（静的const/動的CBの別・名前は生成cfgから・キュー/状態の読み解き・優先度ビットマップのMSB詰め・割込みコントローラのレジスタ観測・スタック使用量の概算・Python対応gdb）／エミュレータのSMPモデル欠落（二次コア解放未実装・CPUインターフェース誤配置→本体パッチ）・WFE/SEV未模擬→スピン解放／反復ブリングアップのリセット粒度（system でなく processor 粒度で共有初期化を保つ） |
+| [`references/debugging-playbook.md`](references/debugging-playbook.md) | ハードフォルト/ハング/優先度逆転/スタック溢れ/コンテキストエラー等の症状→原因→確認手順（再ロード時の割込みアクティブ残留／クロスPEアラームの実機限定ずれ＝PE間時刻基準／バリア型MPテストの所要PE数／IPIルーティングのアフィニティ整列） |
 | [`references/conformance-ttsp3.md`](references/conformance-ttsp3.md) | TTSP3 の概念・PASS/FAIL/SKIP の解釈・移植検証での使い方 |
-| [`references/multiprocessor-testing.md`](references/multiprocessor-testing.md) | FMP系（SMP）派生のテスト・カバレッジ概念（PE間枝・時刻転送・割込みアフィニティ・IRC方式・PE間同期・サブ優先度）＋SMPレースの決定的再現法（最小リバート帰属・自己マイグレーション往復） |
+| [`references/multiprocessor-testing.md`](references/multiprocessor-testing.md) | FMP系（SMP）派生のテスト・カバレッジ概念（PE間枝・時刻転送・割込みアフィニティ・IRC方式・PE間同期・サブ優先度）＋SMPレースの決定的再現法（最小リバート帰属・自己マイグレーション往復）＋クロスPE時間イベントは全PE一致の単一時間基準を要する（per-PE未同期カウンタ＝実機限定で破綻／全PEが読むグローバル時刻を合成） |
 | [`references/deterministic-time-simulation.md`](references/deterministic-time-simulation.md) | タイマドライバシミュレータで時間管理を決定的に検証（シミュレート時刻を「進める呼出」で進める→周期/アラーム/タイムアウトを実機・通常エミュ非依存で再現／マルチコアは進める呼出がPE間バリア＝クロスPE時刻同期試験／HRT割込み誘発のみアーキ依存＝ソフトでペンディング可能な割込み源を選ぶ／host-simulation-port・multiprocessor-testingとは目的が別） |
 | [`references/host-simulation-port.md`](references/host-simulation-port.md) | ホスト上で擬似実行する移植（POSIX等・タスク＝ホストスレッド）のデバッグ着眼（決定/担体分離のレース窓・per-PE汚染・シグナル乗っ取り・lost-wakeup） |
 | [`references/reaching-unreachable-contexts.md`](references/reaching-unreachable-contexts.md) | タスクから踏めない実行時コンテキスト（アイドル＝実行中タスク無し等）の防御/復帰経路へ、正規フック点を計測用刺激注入口に流用してカーネル無改変で到達する作法（最初の進入で起こす・ハンドラ最小復帰・SMPは自PE固定） |
